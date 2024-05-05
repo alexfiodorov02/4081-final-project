@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-orange">
+  <div class="container-fluid">
+    <a class="navbar-brand mb-1" href="<%= posts_path %>">Munch</a>
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to 'Recipes', posts_path, class: 'nav-link #{active_class(posts_path)}' %>
+        </li>
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "My Profile", user_profile_path(current_user), class: "nav-link #{active_class(user_profile_path(current_user))}" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "My Cookbook", user_cookbook_path(current_user), class: "nav-link #{active_class(user_cookbook_path(current_user))}" %>
+          </li>
+        <% end %>
+      </ul>
+
+      <form class="d-flex" action="<%= posts_path %>" method="get" id="search-form">
+        <input class="form-control me-2" type="search" placeholder="Search Recipes" aria-label="Search" name="search" value="<%= params[:search] %>">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+      </form>
+
+      <ul class="navbar-nav ml-auto">
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "Hi, #{current_user.email}", edit_user_registration_path, class: "nav-link #{active_class(edit_user_registration_path)}" %>
+          </li>
+          <li class="nav-item">
+            <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, data: { turbo: false }, class: 'btn btn-outline-light' %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to 'Sign In',new_user_session_path, class: "nav-link #{active_class(new_user_session_path)}" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link #{active_class(new_user_registration_path)}" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

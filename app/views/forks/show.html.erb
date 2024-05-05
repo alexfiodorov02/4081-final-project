@@ -1,0 +1,84 @@
+<div class="container mt-5">
+  <h1 class="mb-4"><%= @fork.title %></h1>
+
+  <div class="sweets-counter mb-3">
+    <% if @fork.likes.count > 0 %>
+      <strong><%= pluralize(@fork.likes.count, 'Sweet') %></strong>
+    <% end %>
+  </div>
+  <% if @fork.liked_by?(current_user) %>
+    <%= button_to 'Unsweet', fork_like_path(@fork, @fork.likes.find_by(user: current_user)), method: :delete, class: 'btn btn-warning mb-3' %>
+  <% else %>
+    <%= button_to 'Sweet', fork_likes_path(@fork), method: :post, class: 'btn btn-success mb-3' %>
+  <% end %>
+
+  <ul class="list-group mb-3">
+    <li class="list-group-item">Forked by: <%= link_to @fork.user.email, user_profile_path(@fork.user) %></li>
+    <li class="list-group-item">Original Author: <%= link_to @fork.post.user.email, post_path(@fork.post) %></li>
+    <li class="list-group-item">Meal: <%= @fork.tag_list('meal') %></li>
+    <li class="list-group-item">Difficulty: <%= @fork.tag_list('difficulty') %></li>
+    <li class="list-group-item">Cuisine: <%= @fork.tag_list('cuisine') %></li>
+    <li class="list-group-item">Dietary: <%= @fork.tag_list('dietary') %></li>
+  </ul>
+
+  <% if @fork.image.attached? %>
+    <div>
+      <%= image_tag @fork.image, style: 'max-height: 20em;' %>
+    </div>
+  <% end %>
+
+  <% if @fork.description.present? %>
+    <h2 class="mb-3">Description</h2>
+    <p class="mb-3"><%= @fork.description %></p>
+  <% end %>
+  <% if @fork.ingredients.present? %>
+    <h2 class="mb-3">Ingredients</h2>
+    <p class="mb-3"><%= @fork.ingredients %></p>
+  <% end %>
+  <% if @fork.directions.present? %>
+    <h2 class="mb-3">Directions</h2>
+    <p class="mb-3"><%= @fork.directions %></p>
+  <% end %>
+
+  <% favorite = @fork.favorite_for(current_user) %>
+  <% if favorite %>
+    <%= button_to 'Remove from Cookbook', favorite_path(favorite), method: :delete, class: 'btn btn-warning mb-3' %>
+  <% else %>
+    <%= button_to 'Add to Cookbook', fork_favorites_path(@fork), method: :post, class: 'btn btn-success mb-3' %>
+  <% end %>
+
+  <% if current_user == @fork.user %>
+    <hr>
+    <%= link_to 'Edit this Fork', edit_fork_path(@fork), class: 'btn btn-primary mt-3' %>
+    <%= button_to 'Delete this Fork', fork_path(@fork), method: :delete, data: { turbo: false }, class: 'btn btn-danger mt-3', form: { class: 'd-inline' } %>
+  <% end %>
+
+  <hr>
+  <h2 class="mb-3">Comments</h2>
+  <% @fork.comments.each do |comment| %>
+    <div class="comment-box mb-3">
+      <p><%= comment.user.email %></p>
+      <p><%= comment.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+      <p><strong>Comment:</strong> <%= comment.body %></p>
+      <% if current_user && comment.user == current_user %>
+        <%= button_to 'Delete', fork_comment_path(@fork, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      <% end %>
+    </div>
+  <% end %>
+  <%= render partial: 'comments/form', locals: { commentable: @fork } %>
+
+  <div class="flag-button-container mt-3">
+    <% if current_user %>
+      <% current_user_flag = @fork.flags.find_by(user: current_user) %>
+      <% if current_user_flag %>
+        <%= button_to 'Unflag', fork_flag_path(@fork, current_user_flag), method: :delete, class: 'btn btn-danger' %>
+      <% else %>
+        <%= button_to 'Flag this Recipe', fork_flags_path(@fork), method: :post, class: 'btn btn-warning' %>
+      <% end %>
+      <% if @fork.flags.count > 0 %>
+        <span class="flag-count ml-2"><%= pluralize(@fork.flags.count, 'flag') %></span>
+      <% end %>
+    <% end %>
+  </div>
+  <%= link_to 'Back To Posts', posts_path, class: 'btn btn-outline-secondary mt-3' %>
+</div>

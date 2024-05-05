@@ -1,0 +1,24 @@
+<h1>Edit Post</h1>
+
+<%= bootstrap_form_with model: @post, url: post_path(@post), method: :patch, data: { turbo: false } do |f| %>
+
+  <%= f.text_field :title %>
+  <%= f.text_area :description, placeholder: 'Summary of the post' %>
+  <%= f.text_area :ingredients, placeholder: 'List of ingredients required' %>
+  <%= f.text_area :directions, placeholder: 'Steps to prepare the recipe' %>
+
+  <div>
+    <%= f.select :meal_tags, options_for_select(['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack'], @post.tag_list('meal')), include_blank: true, class: 'form-control' %>
+  </div>
+
+  <div>
+    <%= f.select :difficulty_tags, options_for_select(['Easy', 'Medium', 'Hard', 'Expert'], @post.tag_list('difficulty')), include_blank: true, class: 'form-control' %>
+  </div>
+
+  <%= f.text_field :cuisine_tags, placeholder: 'e.g. American, Italian (separate with commas)', value: @post.tag_list('cuisine') %>
+
+  <%= f.text_field :dietary_tags, placeholder: 'e.g. Gluten Free, Vegan (separate with commas)', value: @post.tag_list('dietary') %>
+
+  <%= f.submit "Update Post", class: 'btn btn-primary' %>
+
+<% end %>

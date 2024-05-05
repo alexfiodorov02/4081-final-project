@@ -1,0 +1,38 @@
+<div class="container">
+  <h1>My Cookbook</h1>
+  <% if @favorites.exists? %>
+    <% @favorites.each do |favorite| %>
+      <% post = favorite.favoritable %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <% if post.image.attached? %>
+                <%= image_tag post.image, class: 'img-fluid', style: 'max-height: 12em;'%>
+              <% else %>
+                <%= image_tag 'default.png', class: 'img-fluid', style: 'max-height: 200px; max-width: 260px' %>
+              <% end %>
+            </div>
+            <div class="col-md-8">
+              <h2 class="card-title"><%= link_to post.title, post_path(post) %></h2>
+              <p class="card-text">
+                <strong>Difficulty:</strong> <%= post.difficulty %><br>
+                <strong>Type Of Meal:</strong> <%= post.meal %><br>
+                <strong>Cuisine:</strong> <%= post.cuisine %><br>
+                <strong>User:</strong> <%= post.user.email %><br>
+                <strong>Date:</strong> <%= post.created_at.strftime("%B %d, %Y") %><br>
+                <strong>Sweets:</strong> <%= pluralize(post.likes.count, 'Sweet') %>
+              </p>
+              <% if current_user == @user %>
+                <%= button_to 'Remove', favorite_path(favorite), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    <% end %>
+  <% else %>
+    <p>No recipes added to the cookbook yet.</p>
+  <% end %>
+</div>

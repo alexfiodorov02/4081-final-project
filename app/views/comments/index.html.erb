@@ -1,0 +1,10 @@
+<h1>Comments</h1>
+
+<%= render 'form', post: @post %>
+<% @comments.each do |comment| %>
+  <div>
+    <p><strong>User:</strong> <%= comment.user.email %></p> 
+    <p><strong>Posted at:</strong> <%= comment.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+    <p><strong>Body:</strong> <%= comment.body %></p>
+  </div>
+<% end %>

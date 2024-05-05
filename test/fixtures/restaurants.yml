@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: restaurants
+#
+#  id         :bigint           not null, primary key
+#  r_address  :string
+#  r_city     :string
+#  r_name     :string
+#  r_state    :string
+#  r_type     :string
+#  r_zip      :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  r_name: MyString
+  r_address: MyString
+  r_type: MyString
+  r_city: MyString
+  r_state: MyString
+  r_zip: 1
+
+two:
+  r_name: MyString
+  r_address: MyString
+  r_type: MyString
+  r_city: MyString
+  r_state: MyString
+  r_zip: 1

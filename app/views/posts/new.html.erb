@@ -1,0 +1,37 @@
+<h1>Create New Post</h1>
+
+<%= bootstrap_form_with model: @post, url: posts_path, method: :post, local: true do |f| %>
+
+  <%= f.text_field :title %>
+  <%= f.text_area :description, placeholder: 'Summary of the post' %>
+  <%= f.text_area :ingredients, placeholder: 'List of ingredients required' %>
+  <%= f.text_area :directions, placeholder: 'Steps to prepare the recipe' %>
+
+  <div>
+    <%= f.label :meal %><br>
+    <%= f.hidden_field :meal_tags, value: @post.tag_list('meal') %>
+    <%= select_tag :meal, options_for_select(['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack'], selected: @post.tag_list('meal')), include_blank: true, class: 'form-control', onchange: "this.form['post[meal_tags]'].value = this.value" %>
+  </div>
+
+  <div>
+    <%= f.label :difficulty %><br>
+    <%= f.hidden_field :difficulty_tags, value: @post.tag_list('difficulty') %>
+    <%= select_tag :difficulty, options_for_select(['Easy', 'Medium', 'Hard', 'Expert'], selected: @post.tag_list('difficulty')), include_blank: true, class: 'form-control', onchange: "this.form['post[difficulty_tags]'].value = this.value" %>
+  </div>
+
+  <div>
+    <%= f.text_field :cuisine_tags, placeholder: 'e.g. American, Italian (separate with commas)', value: @post.tag_list('cuisine') %>
+  </div>
+
+  <div>
+    <%= f.text_field :dietary_tags, placeholder: 'e.g. Gluten Free, Vegan (separate with commas)', value: @post.tag_list('dietary') %>
+  </div>
+
+  <div>
+    <%= f.label :image, "Upload Image" %>
+    <%= f.file_field :image, accept: "image/jpeg,image/png" %>
+  </div>
+
+  <%= f.submit "Create Post", class: 'btn btn-primary' %>
+
+<% end %>

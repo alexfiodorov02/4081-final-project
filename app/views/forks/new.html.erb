@@ -1,0 +1,56 @@
+<h1>New Fork</h1>
+
+<%= form_with(model: [ @post, @fork ], local: true, data: { turbo: false }) do |form| %>
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title, value: @post.title %>
+  </div>
+
+  <div>
+    <%= form.label :description %>
+  <%= form.text_area :description, placeholder: 'Summary of the post', value: @post.description %>
+  </div>
+
+  <div>
+  <%= form.label :ingredients %>
+  <%= form.text_area :ingredients, placeholder: 'List of ingredients required', value: @post.ingredients %>
+  </div>
+
+  <div>
+  <%= form.label :directions %>
+  <%= form.text_area :directions, placeholder: 'Steps to prepare the recipe', value: @post.directions %>
+  </div>
+
+  <div>
+    <%= form.label :meal, "Type of Meal" %>
+    <%= form.hidden_field :meal_tags, value: @fork.tag_list('meal') %>
+    <%= select_tag :meal, options_for_select(['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack'], selected: @fork.tag_list('meal')), include_blank: true, class: 'form-control', onchange: "this.form['fork[meal_tags]'].value = this.value" %>
+  </div>
+
+  <div>
+    <%= form.label :difficulty, "Difficulty" %>
+    <%= form.hidden_field :difficulty_tags, value: @fork.tag_list('difficulty') %>
+    <%= select_tag :difficulty, options_for_select(['Easy', 'Medium', 'Hard', 'Expert'], selected: @fork.tag_list('difficulty')), include_blank: true, class: 'form-control', onchange: "this.form['fork[difficulty_tags]'].value = this.value" %>
+  </div>
+
+  <div>
+    <%= form.label :cuisine, "Cuisine" %>
+    <%= form.text_field :cuisine_tags, value: @fork.tag_list('cuisine'), placeholder: 'e.g. American, Italian (separate with commas)' %>
+  </div>
+
+  <div>
+    <%= form.label :dietary, "Dietary Restrictions" %>
+    <%= form.text_field :dietary_tags, value: @fork.tag_list('dietary'), placeholder: 'e.g. Gluten Free, Vegan (separate with commas)' %>
+  </div>
+
+  <div>
+    <%= form.label :image, "Upload Image" %>
+    <%= form.file_field :image, accept: "image/jpeg,image/png" %>
+  </div>
+
+  <div>
+    <%= form.submit "Create Fork", class: "btn btn-primary" %>
+  </div>
+
+  <%= link_to 'Back', post_path(@post) %>
+<% end %>

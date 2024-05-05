@@ -1,0 +1,9 @@
+
+<h1>Forked Recipes</h1>
+
+<% @forks.each do |fork| %>
+  <div>
+    <h2><%= link_to fork.post.title, fork %></h2>
+    <p>Forked by: <%= fork.user.username %></p>
+  </div>
+<% end %>
